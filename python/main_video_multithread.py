@@ -10,12 +10,12 @@ import argparse
 import func_multithread
 import config
 
-model_path='../model/yolo11.rknn'
+model_path='../model/best1.rknn'
 
-cap = cv2.VideoCapture('./720p60hz.mp4')
+cap = cv2.VideoCapture('../model/15.mp4')
 
 args = argparse.Namespace(
-    model_path='../model/yolo11.rknn',
+    model_path='../model/best1.rknn',
     target='rk3588',
     device_id=None,
     img_show=False,
