@@ -26,7 +26,7 @@ args = argparse.Namespace(
 )
 
 # 线程数, 增大可提高帧率
-TPEs = 3
+TPEs = 2
 # 初始化rknn池
 pool = rknnPoolExecutor(
     rknnModel=model_path,
@@ -56,6 +56,7 @@ while (cap.isOpened()):
     frame, flag = pool.get()
     if flag == False:
         break
+
     cv2.imshow('test', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
