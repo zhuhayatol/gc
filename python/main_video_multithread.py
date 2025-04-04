@@ -12,7 +12,7 @@ import config
 
 model_path='../model/best1.rknn'
 
-cap = cv2.VideoCapture('../model/15.mp4')
+cap = cv2.VideoCapture(0)
 
 args = argparse.Namespace(
     model_path='../model/best1.rknn',
