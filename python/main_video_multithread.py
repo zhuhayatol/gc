@@ -36,10 +36,10 @@ pool = rknnPoolExecutor(
 # 初始化异步所需要的帧
 if (cap.isOpened()):
     for i in range(TPEs + 1):
-        ret, frame = cap.read()
+        ret, frame = cap.read()        
         if not ret:
             cap.release()
-            del pool
+            del pool   
             exit(-1)
 
         pool.put(frame)
@@ -53,9 +53,18 @@ while (cap.isOpened()):
     if not ret:
         break
     pool.put(frame)
-    frame, flag = pool.get()
+    result, flag = pool.get()
     if flag == False:
         break
+
+    frame, boxes, classes, scores = result  # 接收 myFunc 的返回值
+
+    # 对 boxes, classes, scores 进行判断
+    if boxes is not None and len(boxes) > 0:
+        print(f"Detected {len(boxes)} objects.")
+        # 示例：判断是否检测到特定类别
+        if any(config.CLASSES[cl] == "person" for cl in classes):
+            print("Person detected!")
 
     cv2.imshow('test', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
