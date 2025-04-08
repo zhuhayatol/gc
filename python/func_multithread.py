@@ -240,4 +240,4 @@ def myFunc(rknn_lite, IMG):
             if(2*config.X1 < x1 + x2 and x1+x2 < 2*config.X2) and (2*config.Y1 < y1 + y2 and y1+y2 < 2*config.Y2):
                 print(f"Class: {config.CLASSES[cl]}, Score: {score:.2f}, Box: ({x1}, {y1}, {x2}, {y2})") # 输出感兴趣范围内的坐标
         '''
-    return IMG
+    return IMG, boxes, scores, classes

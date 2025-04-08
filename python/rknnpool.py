@@ -51,7 +51,7 @@ class rknnPoolExecutor():
 
     def get(self):
         if self.queue.empty():
-            return None, False
+            return None ,False
         fut = self.queue.get()
         return fut.result(), True
 

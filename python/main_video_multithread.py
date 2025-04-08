@@ -53,11 +53,16 @@ while (cap.isOpened()):
     if not ret:
         break
     pool.put(frame)
-    frame, flag = pool.get()
+    result,flag = pool.get()
     if flag == False:
         break
 
-    cv2.imshow('test', frame)
+    frame,boxes,scores,classes=result
+    #cv2.imshow('test', frame)
+    print(boxes)
+    print(scores)
+    print(classes)
+    
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     if frames % 30 == 0:
