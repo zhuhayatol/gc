@@ -231,7 +231,12 @@ def myFunc(rknn_lite, IMG):
 
     outputs = rknn_lite.inference(inputs=[input_data])
     boxes, classes, scores = post_process(outputs)  # 对输出进行后处理
+                    #如果允许保存视频，则将当前帧写入视频文件
 
+    # if (cfg.SaveConfig.VIDEO_SAVE_OPTIONS['ENABLED'] and 
+    #     video_writer is not None):
+    #     video_writer_thread.write(frame)
+    
     if boxes is not None:  # 如果检测到目标
         draw(IMG, boxes, scores, classes)  # 在图像上绘制检测框和类别信息
         '''
