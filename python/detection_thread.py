@@ -61,7 +61,7 @@ def process_image(image_path, pool, detection_queue, serial_queue):
             center_y = (y1 + y2) // 2
             print(f"目标 {i+1}:")
             print(f"  类别: {cfg.CLASSES[cl]}")
-            print(f"     置信度: {score:.3f}")
+            print(f"      置信度: {score:.3f}")
             print(f"  边界框: ({x1}, {y1}, {x2}, {y2})")
             print(f"  中心点: ({center_x}, {center_y})")
             print("-" * 50)
