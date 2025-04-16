@@ -143,7 +143,7 @@ def parse_args():
     parser.add_argument('--source', 
                        type=str,
                        choices=['camera', 'video', 'image'],
-                       default='video',
+                       default='camera',
                        help='选择输入源类型(camera/video/image)')
     parser.add_argument('--input',
                        type=str,
@@ -151,7 +151,7 @@ def parse_args():
                        help='输入文件路径(视频或图像)')
     parser.add_argument('--camera-id',
                        type=int,
-                       default=0,
+                       default=11,
                        help='摄像头ID')
     
     # 视频保存选项

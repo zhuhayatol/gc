@@ -12,9 +12,11 @@ class Restaurant:
 restaurant=Restaurant("xjtu","Sichuan")
 restaurant1=Restaurant("sjtu","Shanghai")
 restaurant2=Restaurant("thu","Beijing")
+re1=Restaurant("lhl","anhui")
 print(restaurant.restaurant_name,restaurant.cuisine_type)
 
 
 restaurant.describe_restaurant()
 restaurant1.describe_restaurant()
 restaurant2.describe_restaurant()
+re1.describe_restaurant()

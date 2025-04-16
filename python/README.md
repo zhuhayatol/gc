@@ -123,7 +123,7 @@ requirements.txt文件内容如下
 
 ## 板端升级Cmake版本
 
-    conda install -c conda-forge cmake=3.25.*
+    y
 
 ## 板端安装rknn-toolkit（2.3.0版本）
 
@@ -136,7 +136,6 @@ requirements.txt文件内容如下
 
     cd ~/rknn-toolkit2/rknn-toolkit-lite2/packages
     pip install rknn_toolkit_lite2-2.3.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-
     # 拷贝对应文件
     cd ~/rknn-toolkit2/rknpu2/runtime/Linux/rknn_server/aarch64/usr/bin
     sudo cp * /usr/bin/
@@ -149,7 +148,7 @@ requirements.txt文件内容如下
     # 若版本不对，使用下面命令重新安装torch
     pip install torch==1.13.1 -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-## 板端克隆官方Model仓库
+## 板端克隆官方Model仓库cd /h   
 
     git clone git@github.com:airockchip/rknn_model_zoo.git
 
