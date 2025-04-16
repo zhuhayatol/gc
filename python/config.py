@@ -22,12 +22,12 @@ OUTPUT_PREDICTION_BOX_COORDINATES = False
 
 # 检测类别顺序列表
 CLASSES = (
- "red ball","black ball","blue ball","yellow ball","red square","blue square"
+ "red ball","black ball","blue ball","yellow ball","red square","blue square","red start","blue start","crossing"
 )
 
 # COCO 数据集的类别 ID 列表（与类别顺序对应）
 coco_id_list = [
-    0, 1, 2, 3, 4, 5 ]
+    0, 1, 2, 3, 4, 5, 6, 7, 8 ]
 
 
 # 串口配置
@@ -43,7 +43,7 @@ serial = Serial(
 )
 
 #model_path 是模型的路径
-model_path='../model/best1.rknn'
+model_path='../model/yolo111.rknn'
     
 #camera_id
 camera_id=0

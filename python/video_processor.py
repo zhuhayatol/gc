@@ -81,47 +81,22 @@ class VideoProcessor:
         """设置输入源"""
         try:
             if cfg.SourceConfig.CURRENT_SOURCE == cfg.SourceConfig.SOURCE_TYPE['CAMERA']:
-                # 设置设备参数
-                os.system(f"v4l2-ctl --device=/dev/video-camera0 \
-                          --set-fmt-video=width=640,height=480,pixelformat=NV12")
-                os.system(f"v4l2-ctl --device=/dev/video-camera0 --set-parm=30")
-                
-                # 使用 GStreamer pipeline
-                pipeline = (
-                    f"v4l2src device=/dev/video-camera0 ! "
-                    f"video/x-raw,format=NV12,width=640,height=480,framerate=30/1 ! "
-                    f"videoconvert ! video/x-raw,format=BGR ! "
-                    f"appsink"
-                )
-                
-                # 尝试使用 GStreamer pipeline
-                self.cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)
-                
-                # 如果 GStreamer 失败，尝试直接打开
-                if not self.cap.isOpened():
-                    print("GStreamer pipeline 失败，尝试直接打开设备")
-                    self.cap = cv2.VideoCapture(cfg.SourceConfig.CAMERA_ID)
-                    
-                    # 设置摄像头属性
-                    self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('N', 'V', '1', '2'))
-                    self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-                    self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-                    self.cap.set(cv2.CAP_PROP_FPS, 30)
-                    
+            
+                # 直接打开 video11
+                self.cap = cv2.VideoCapture(11)  # 或者使用 cfg.SourceConfig.CAMERA_ID
+            
                 if not self.cap.isOpened():
                     raise RuntimeError("无法打开摄像头")
-                    
-                # 打印实际的分辨率和帧率
+                
+                # 打印实际参数
                 actual_width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
                 actual_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
                 actual_fps = int(self.cap.get(cv2.CAP_PROP_FPS))
-                actual_fourcc = self.cap.get(cv2.CAP_PROP_FOURCC)
-                
+            
                 print(f"摄像头初始化成功:")
                 print(f"- 分辨率: {actual_width}x{actual_height}")
                 print(f"- 帧率: {actual_fps}")
-                print(f"- 格式: {chr(int(actual_fourcc)&0xFF)}{chr((int(actual_fourcc)>>8)&0xFF)}"
-                      f"{chr((int(actual_fourcc)>>16)&0xFF)}{chr((int(actual_fourcc)>>24)&0xFF)}")
+            
             else:
                 source = (cfg.SourceConfig.CAMERA_ID 
                          if cfg.SourceConfig.CURRENT_SOURCE == cfg.SourceConfig.SOURCE_TYPE['CAMERA']
@@ -220,7 +195,7 @@ class VideoProcessor:
                 break
 
             frame, boxes, scores, classes = result
-            #cv2.imshow("检测结果", frame)
+            cv2.imshow("result", frame)
             
             if (cfg.SaveConfig.VIDEO_SAVE_OPTIONS['ENABLED'] and 
                 self.video_writer_thread is not None):

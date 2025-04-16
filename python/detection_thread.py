@@ -24,14 +24,13 @@ def process_detection_results(detection_queue, serial_queue):
             center_y = (y1 + y2) // 2
             
             # 示例：根据不同类别和位置进行判断
-            if cl == 0 and score > 0.6:  # 类别0且置信度大于0.6
-                if 200 < center_x < 800:
-                    # 将串口消息放入队列
-                    serial_queue.put({
-                        'command': b'\x31',
-                        'x': center_x,
-                        'y': center_y,
-                    })
+            
+            # 将串口消息放入队列
+            serial_queue.put({
+                'command': b'\x31',
+                'x': center_x,
+                'y': center_y,
+            })
 
 
 def process_image(image_path, pool, detection_queue, serial_queue):
@@ -104,7 +103,7 @@ def setup_video_writer(cap, output_path):
     print(f"原始分辨率: {width}x{height}")
     
     # 等比例缩放
-    max_dimension = 1920  # 设置最大边长
+    max_dimension = 640  # 设置最大边长
     if width > max_dimension or height > max_dimension:
         # 计算缩放比例
         scale = min(max_dimension / width, max_dimension / height)
