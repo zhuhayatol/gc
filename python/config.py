@@ -4,16 +4,6 @@ OBJ_THRESH = 0.25  # 目标检测的置信度阈值
 NMS_THRESH = 0.45  # 非极大值抑制（NMS）的阈值
 IMG_SIZE = (640, 640)  # 输入图像的尺寸（宽，高）
 
-# 感兴趣范围坐标
-CENTER_X = 320
-CENTER_Y = 320
-WIDTH = 640
-HEIGHT = 640
-
-X1 = CENTER_X - WIDTH / 2
-X2 = CENTER_X + WIDTH / 2
-Y1 = CENTER_Y - HEIGHT / 2
-Y2 = CENTER_Y + HEIGHT / 2
 
 
 # 选择是否输出预测框坐标
@@ -27,7 +17,7 @@ CLASSES = (
 
 # COCO 数据集的类别 ID 列表（与类别顺序对应）
 coco_id_list = [
-    0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+    1, 2, 3, 4, 5, 6, 7, 8 ,9]
 
 
 # 串口配置
@@ -43,19 +33,19 @@ serial = Serial(
 )
 
 #model_path 是模型的路径
-model_path='../model/yolo111.rknn'
+model_path='../model/best8.rknn'
     
 #camera_id
-camera_id=0
+camera_id=11
 
 #视频文件路径
-video_path='../model/15.mp4'
+video_path='../model/3.mp4'
 
 #图片文件路径
-image_path='../model/hay.jpg'
+image_path='../model/2.jpg'
 
 # 线程数, 增大可提高帧率
-TPEs = 3\
+TPEs = 3
 
 
 """
@@ -70,8 +60,8 @@ class SourceConfig:
     }
     
     # 路径配置
-    VIDEO_PATH = '../model/15.mp4'
-    IMAGE_PATH = '../model/hay.jpg'
+    VIDEO_PATH = '../model/3.mp4'
+    IMAGE_PATH = '../model/2.jpg'
     CAMERA_ID = 0
     
     # 当前使用的输入源类型

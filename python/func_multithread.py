@@ -176,20 +176,22 @@ def post_process(input_data):
 
 
 def draw(image, boxes, scores, classes):
-    """
-    在图像上绘制检测框和类别信息。
-    :param image: 输入图像
-    :param boxes: 检测框的坐标
-    :param scores: 检测框的得分
-    :param classes: 检测框的类别
-    """
-    for box, score, cl in zip(boxes, scores, classes):  # 遍历每个检测框
-        top, left, right, bottom = [int(_b) for _b in box]  # 获取检测框的坐标
-        if config.OUTPUT_PREDICTION_BOX_COORDINATES:        
-            print("%s @ (%d %d %d %d) %.3f" % (config.CLASSES[cl], top, left, right, bottom, score))  # 打印检测框信息
-        cv2.rectangle(image, (top, left), (right, bottom), (255, 0, 0), 2)  # 绘制检测框
-        cv2.putText(image, '{0} {1:.2f}'.format(config.CLASSES[cl], score),  # 绘制类别和得分
-                    (top, left - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+    for box, score, cl in zip(boxes, scores, classes):
+        if cl >= len(config.CLASSES):
+            print(f"警告: 类别索引 {cl} 超出范围")
+            continue
+            
+        top, left, right, bottom = [int(_b) for _b in box]
+        cv2.rectangle(image, (top, left), (right, bottom), (255, 0, 0), 2)
+        cv2.putText(
+            image, 
+            f'{config.CLASSES[cl]} {score:.2f}',
+            (top, left - 6),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.6,
+            (0, 0, 255),
+            2
+        )
 
 
 def setup_model():
@@ -222,27 +224,40 @@ def img_check(path):
 
 
 def myFunc(rknn_lite, IMG):
-    # 使用 Letter Box 预处理图像
-    pad_color = (0, 0, 0)  # 填充颜色
-    IMG = co_helper.letter_box(im=IMG.copy(), new_shape=(config.IMG_SIZE[1], config.IMG_SIZE[0]), pad_color=pad_color)
-    # IMG = cv2.cvtColor(IMG, cv2.COLOR_BGR2RGB)  # 将图像从 BGR 转换为 RGB
-
-    input_data = np.expand_dims(IMG, axis=0)  # RKNN 模型不需要额外预处理
-
-    outputs = rknn_lite.inference(inputs=[input_data])
-    boxes, classes, scores = post_process(outputs)  # 对输出进行后处理
-                    #如果允许保存视频，则将当前帧写入视频文件
-
-    # if (cfg.SaveConfig.VIDEO_SAVE_OPTIONS['ENABLED'] and 
-    #     video_writer is not None):
-    #     video_writer_thread.write(frame)
+    """处理单帧图像
+    Args:
+        rknn_lite: RKNN 推理引擎
+        IMG: 输入图像(BGR格式)
+    Returns:
+        IMG: 处理后的图像
+        boxes: 检测框坐标
+        scores: 置信度分数
+        classes: 类别索引
+    """
+    # 1. 颜色空间转换 (BGR->RGB)
+    IMG = cv2.cvtColor(IMG, cv2.COLOR_BGR2RGB)
     
-    if boxes is not None:  # 如果检测到目标
-        draw(IMG, boxes, scores, classes)  # 在图像上绘制检测框和类别信息
-        '''
-        for box, score, cl in zip(boxes, scores, classes):
-            x1, y1, x2, y2 = [int(_b) for _b in box]  # 获取检测框的坐标
-            if(2*config.X1 < x1 + x2 and x1+x2 < 2*config.X2) and (2*config.Y1 < y1 + y2 and y1+y2 < 2*config.Y2):
-                print(f"Class: {config.CLASSES[cl]}, Score: {score:.2f}, Box: ({x1}, {y1}, {x2}, {y2})") # 输出感兴趣范围内的坐标
-        '''
+    # 2. Letter Box 处理
+    pad_color = (0, 0, 0)
+    IMG = co_helper.letter_box(
+        im=IMG.copy(), 
+        new_shape=(config.IMG_SIZE[1], config.IMG_SIZE[0]), 
+        pad_color=pad_color
+    )
+    
+    # 3. 添加 batch 维度
+    input_data = np.expand_dims(IMG, axis=0)
+    
+    # 4. 模型推理
+    outputs = rknn_lite.inference(inputs=[input_data])
+    
+    # 5. 后处理获取检测结果
+    boxes, classes, scores = post_process(outputs)
+    
+    # 6. 在图像上绘制结果
+    if boxes is not None:
+        # 转回 BGR 用于显示
+        IMG = cv2.cvtColor(IMG, cv2.COLOR_RGB2BGR)
+        draw(IMG, boxes, scores, classes)
+    
     return IMG, boxes, scores, classes

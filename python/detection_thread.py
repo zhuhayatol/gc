@@ -146,7 +146,7 @@ def parse_args():
                        help='选择输入源类型(camera/video/image)')
     parser.add_argument('--input',
                        type=str,
-                       default='../model/15.mp4',
+                       default='../model/1.mp4',
                        help='输入文件路径(视频或图像)')
     parser.add_argument('--camera-id',
                        type=int,
@@ -164,7 +164,7 @@ def parse_args():
                        help='保存视频的帧率')
     parser.add_argument('--video-codec',
                        type=str,
-                       default='MJPG',
+                       default='NV12',
                        help='视频编码器(MJPG, XVID等)')
     return parser.parse_args()
 

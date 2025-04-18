@@ -87,7 +87,10 @@ class VideoProcessor:
             
                 if not self.cap.isOpened():
                     raise RuntimeError("无法打开摄像头")
-                
+                    
+                self.cap.set(cv2.CAP_PROP_FRAME_WIDTH,1920)
+                self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT,1080) 
+                self.cap.set(cv2.CAP_PROP_FPS,30)
                 # 打印实际参数
                 actual_width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
                 actual_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -167,7 +170,7 @@ class VideoProcessor:
             
     def _process_image(self):
         """处理图像"""
-        process_image(self.input_path, self.pool, self.detection_queue, self.serial_queue)
+        process_image(cfg.image_path, self.pool, self.detection_queue, self.serial_queue)
         
     def _process_video(self):
         """处理视频"""
@@ -185,17 +188,22 @@ class VideoProcessor:
         
         while self.cap.isOpened():
             frames += 1
+            
             ret, frame = self.cap.read()
+            print(frame.shape,frame.dtype)
             if not ret:
-                break
 
+            	break
             self.pool.put(frame)
+
             result, flag = self.pool.get()
+
             if not flag:
-                break
+            	break
 
             frame, boxes, scores, classes = result
             cv2.imshow("result", frame)
+            
             
             if (cfg.SaveConfig.VIDEO_SAVE_OPTIONS['ENABLED'] and 
                 self.video_writer_thread is not None):
